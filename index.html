@@ -5,7 +5,7 @@
     <title>Custom Js Form API</title>
 </head>
 <body>
-    <div id="cjf">
+    <div id="form-container">
 
     </div>
 </body>
@@ -88,13 +88,32 @@
         <input type="text" id="property_manager" name="property_manager" value="${data.management.property_manager}" readonly><br>
         <label for="property_manager_email">Property Manager Email:</label>
         <input type="text" id="property_manager_email" name="property_manager_email" value="${data.management.property_manager_email}" readonly><br>
+        <button type="submit">Submit</button>
     `;
         container.appendChild(form);
+
+        // Add event listener for form submission
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            var formData = new FormData(form);
+            submitFormData(formData);
+        });
+    }
+
+    // Function to submit form data via POST request to webhook
+    function submitFormData(formData) {
+        fetch('https://webhook.site/#!/view/6d0b1ca9-3fa5-47b7-9d5b-c08b16c6717a', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => console.log('Form submitted successfully:', data))
+            .catch(error => console.error('Error submitting form:', error));
     }
 
     // Entry point
     document.addEventListener('DOMContentLoaded', function() {
-        var container = document.getElementById('cjf');
+        var container = document.getElementById('form-container');
 
         // Extract tenant_id and property_id from URL
         var tenantId = getParameterByName('tenant_id');
