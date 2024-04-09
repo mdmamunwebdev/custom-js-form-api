@@ -11,6 +11,113 @@
 </body>
 
 <script>
-    //
+
+    // Function to extract URL parameters
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    // Function to mock the API call and return a Promise with mock data
+    function mockApiCall(propertyId, tenantId) {
+        return new Promise((resolve, reject) => {
+            // Simulating asynchronous behavior with setTimeout
+            setTimeout(() => {
+                resolve({
+                    "_id": "pt_property_2119651",
+                    "address": "2/15 Kweda Way, Nollamara, WA, 6061",
+                    "management": {
+                        "property_manager": null,
+                        "property_manager_email": null
+                    },
+                    "members": {
+                        "others": [],
+                        "tenants": [
+                            {
+                                "address": "2/15 Kweda Way, Nollamara, WA, 6061",
+                                "email": null,
+                                "name": "Miss Ahmi Tazmin Belinda Narkle",
+                                "phone": null
+                            },
+                            {
+                                "address": "2/15 Kweda Way, Nollamara, WA, 6061",
+                                "email": null,
+                                "name": "Mr Nicholas Hansen",
+                                "phone": null
+                            }
+                        ]
+                    },
+                    "owner_id": "pt_owner_1721550",
+                    "owner_primary_contact": null,
+                    "property_id": "pt_property_2119651",
+                    "tenancy": {
+                        "lease_end": "2025-04-04T00:00:00",
+                        "lease_start": "2024-04-05T00:00:00"
+                    },
+                    "tenant_id": "pt_tenant_3376520",
+                    "tenant_name": "Ahmi Tazmin Belinda Narkle & Nicholas Hansen",
+                    "tenant_primary_contact": {
+                        "address": "2/15 Kweda Way, Nollamara, WA, 6061",
+                        "email": null,
+                        "name": "Mr Nicholas Hansen",
+                        "phone": null
+                    }
+                });
+            }, 1000); // Simulating delay of 1 second
+        });
+    }
+
+    // Function to create form
+    function createForm(container, data) {
+        var form = document.createElement('form');
+        form.innerHTML = `
+        <label for="tenant_name">Tenant Name:</label>
+        <input type="text" id="tenant_name" name="tenant_name" value="${data.tenant_name}" readonly><br>
+        <label for="lease_start">Lease Start:</label>
+        <input type="text" id="lease_start" name="lease_start" value="${data.tenancy.lease_start}" readonly><br>
+        <label for="lease_end">Lease End:</label>
+        <input type="text" id="lease_end" name="lease_end" value="${data.tenancy.lease_end}" readonly><br>
+        <label for="property_address">Property Address:</label>
+        <input type="text" id="property_address" name="property_address" value="${data.address}" readonly><br>
+        <label for="property_manager">Property Manager:</label>
+        <input type="text" id="property_manager" name="property_manager" value="${data.management.property_manager}" readonly><br>
+        <label for="property_manager_email">Property Manager Email:</label>
+        <input type="text" id="property_manager_email" name="property_manager_email" value="${data.management.property_manager_email}" readonly><br>
+    `;
+        container.appendChild(form);
+    }
+
+    // Entry point
+    document.addEventListener('DOMContentLoaded', function() {
+        var container = document.getElementById('cjf');
+
+        // Extract tenant_id and property_id from URL
+        var tenantId = getParameterByName('tenant_id');
+        var propertyId = getParameterByName('property_id');
+
+        // Check if tenant_id and property_id exist
+        if (!tenantId || !propertyId) {
+            container.innerHTML = "Error: Missing tenant_id or property_id";
+            return;
+        }
+
+        // Mock API call to retrieve information about tenant/property
+        mockApiCall(propertyId, tenantId)
+            .then(data => {
+                // Create form with retrieved data
+                createForm(container, data);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                container.innerHTML = "Error: Failed to fetch data from API";
+            });
+    });
+
+
 </script>
 </html>
