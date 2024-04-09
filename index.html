@@ -203,7 +203,7 @@
     // Function to submit form data via POST request to webhook
     function submitFormData(formData) {
         fetch('https://webhook.site/#!/view/6d0b1ca9-3fa5-47b7-9d5b-c08b16c6717a', {
-            method: 'GET',
+            method: 'POST',
             body: formData
         })
             .then(response => response.json())
