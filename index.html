@@ -1,245 +1,312 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Custom Js Form API</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Example</title>
 
-    <style>
-        /* CSS styles here */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f3f3;
-        }
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/use-bootstrap-select@2.0.0/dist/use-bootstrap-select.min.css">
 
-        .container {
-            max-width: 550px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .address {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        .form-group-btn {
-            margin-bottom: 20px;
-            text-align: end;
-        }
-
-        input[type="submit"] {
-            width: 30%;
-            background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-
-        .footer {
-            font-size: 12px;
-            color: #777;
-        }
-
-        /* Tablet (768px) */
-        @media only screen and (max-width: 768px) {
-            input[type="submit"] {
-                width: 100%;
-            }
-        }
-    </style>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+    <!-- jQuery UI -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 </head>
 <body>
 
-    <div class="container" id="form-container">
-        <!-- Form will be inserted here -->
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-10 mx-auto mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title text-center">
+                        Your lease at the below address is ending soon. We are keen to know what your plan is?
+                    </div>
+                    <div class="h1 text-center">2/15 Kweda Way, Nollamara, WA, 6061</div>
+                    <form class="needs-validation vstack gap-3" novalidate="">
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-5 mx-auto">
+                                <div>
+                                    <select id="example" class="form-select form-select-sm" data-clearable="true" required="">
+                                        <option value="">--- Select ---</option>
+                                        <option value="1">Yes, Lease Renew</option>
+                                        <option value="0">No, Lease Renew</option>
+                                    </select>
+                                    <div class="invalid-feedback">This field is required.</div>
+                                    <div class="valid-feedback">Good choice.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="lease-extension" class="row mb-3">
+                            <label for="example2" class="col-12 col-md-6 text-start col-form-label">
+                                How long you'd like to extend your lease from the
+                                <div class="">current expiry date: 26/03/2025</div>
+                            </label>
+                            <div class="col-12 col-md-6">
+                                <div>
+                                    <select
+                                            id="example2"
+                                            class="form-select form-select-sm"
+                                            data-clearable="true"
+                                            required=""
+                                    >
+                                        <option value="">--- Select ---</option>
+                                        <option value="6">6 months</option>
+                                        <option value="12">12 months</option>
+                                        <option value="18">18 months</option>
+                                        <option value="24">24 months</option>
+                                    </select>
+                                    <div class="invalid-feedback">This field is required.</div>
+                                    <div class="valid-feedback">Good choice.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="proposed-date" class="row mb-3">
+                            <label for="jdatepicker" class="col-12 col-md-6 col-form-label">Proposed Date to Vacate</label>
+                            <div class="col-12 col-md-6">
+                                <input type="text"  id="jdatepicker" class="datepicker form-control" readonly="readonly" required>
+                            </div>
+                        </div>
+                        <div id="reason-termination" class="row mb-3">
+                            <label for="example3" class="col-12 col-md-6 text-start col-form-label">Reason for termination</label>
+                            <div class="col-12 col-md-6">
+                                <div>
+                                    <select
+                                            id="example3"
+                                            class="form-select form-select-sm"
+                                            data-clearable="true"
+                                            required=""
+                                    >
+                                        <option value="">--- Select ---</option>
+                                        <option value="Relocating for work">Relocating for work</option>
+                                        <option value="Moving overseas/interstate">Moving overseas/interstate</option>
+                                        <option value="Seeking larger/smaller home">Seeking larger/smaller home</option>
+                                        <option value="Situation change">Situation change</option>
+                                        <option value="Financial grounds">Financial grounds</option>
+                                        <option value="Prefer not to disclose">Prefer not to disclose</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                    <div class="invalid-feedback">This field is required.</div>
+                                    <div class="valid-feedback">Good choice.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="forwarding-address" class="row mb-3">
+                            <label for="address" class="col-12 col-md-6 col-form-label">Forwarding Address</label>
+                            <div class="col-12 col-md-6">
+                                <input type="text"  id="address" class="form-control"/>
+                            </div>
+                        </div>
+
+                        <div id="swtich" class="row mb-3">
+                            <label class="col-12 col-md-6 col-form-label form-check-label"  for="flexSwitchCheckReverse">RAre there changes to the individual(s) listed on the lease?</label>
+                            <div class="col-12 col-md-6">
+                                <div class="form-check form-switch form-check-reverse">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckReverse">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="occupants-name" class="row mb-3">
+                            <label for="occupant" class="col-12 col-md-6 col-form-label">List the occupant(s) name to add.</label>
+                            <div class="col-12 col-md-6">
+                                <input type="text"  id="occupant" class="form-control"/>
+                            </div>
+                        </div>
+                        <div id="occupants-name-rm" class="row mb-3">
+                            <label for="example4" class="col-12 col-md-6 text-start col-form-label">List the occupant(s) name to add.</label>
+                            <div class="col-12 col-md-6">
+                                <div>
+                                    <select
+                                            id="example4"
+                                            class="form-select form-select-sm"
+                                            data-clearable="true"
+                                            multiple
+                                            required=""
+                                    >
+                                        <option value="">--- Choose ---</option>
+                                        <option value="apple">Apple</option>
+                                        <option value="banana">Banana</option>
+                                        <option value="grape">Grape</option>
+                                        <option value="kiwi">Kiwi</option>
+                                        <option value="orange">Orange</option>
+                                        <option disabled value="snake_fruit">Snake fruit</option>
+                                        <option value="broccoli">Broccoli</option>
+                                        <option value="carrot">Carrot</option>
+                                        <option value="cucumber">Cucumber</option>
+                                        <option disabled value="eggplant">Eggplant</option>
+                                        <option value="spinach">Spinach</option>
+                                        <option value="tomato">Tomato</option>
+                                    </select>
+                                    <div class="invalid-feedback">This field is required.</div>
+                                    <div class="valid-feedback">Good choice.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="rs-btn" class="row mb-3">
+                            <label for="" class="col-12 col-lg-6 col-form-label"></label>
+                            <div class="col-12 col-lg-6 text-end">
+                                <button type="reset" class="btn btn-sm btn-secondary px-5">Reset</button>
+                                <button type="submit" class="btn btn-sm btn-primary px-5">Submit</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <div class=" text-center">
+                        IMPORTANT: We intend this form to be NON-BINDING until a lease agreement or extension is signed. Answers in this form assist us in seeking guidance from your property's owner
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-</body>
+<script src="https://cdn.jsdelivr.net/npm/use-bootstrap-select@2.0.0/dist/use-bootstrap-select.min.js" ></script>
+<script >
 
-<script>
+    const example = new UseBootstrapSelect(document.getElementById('example'))
+    const example2 = new UseBootstrapSelect(document.getElementById('example2'))
+    const example3 = new UseBootstrapSelect(document.getElementById('example3'))
+    const example4 = new UseBootstrapSelect(document.getElementById('example4'))
 
-    // Function to extract URL parameters
-    function getParameterByName(name, url) {
-        if (!url) url = window.location.href;
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
-
-    // Function to mock the API call and return a Promise with mock data
-    function mockApiCall(propertyId, tenantId) {
-        return new Promise((resolve, reject) => {
-            // Simulating asynchronous behavior with setTimeout
-            setTimeout(() => {
-                resolve({
-                    "_id": "pt_property_2119651",
-                    "address": "2/15 Kweda Way, Nollamara, WA, 6061",
-                    "management": {
-                        "property_manager": null,
-                        "property_manager_email": null
-                    },
-                    "members": {
-                        "others": [],
-                        "tenants": [
-                            {
-                                "address": "2/15 Kweda Way, Nollamara, WA, 6061",
-                                "email": null,
-                                "name": "Miss Ahmi Tazmin Belinda Narkle",
-                                "phone": null
-                            },
-                            {
-                                "address": "2/15 Kweda Way, Nollamara, WA, 6061",
-                                "email": null,
-                                "name": "Mr Nicholas Hansen",
-                                "phone": null
-                            }
-                        ]
-                    },
-                    "owner_id": "pt_owner_1721550",
-                    "owner_primary_contact": null,
-                    "property_id": "pt_property_2119651",
-                    "tenancy": {
-                        "lease_end": "2025-04-04T00:00:00",
-                        "lease_start": "2024-04-05T00:00:00"
-                    },
-                    "tenant_id": "pt_tenant_3376520",
-                    "tenant_name": "Ahmi Tazmin Belinda Narkle & Nicholas Hansen",
-                    "tenant_primary_contact": {
-                        "address": "2/15 Kweda Way, Nollamara, WA, 6061",
-                        "email": null,
-                        "name": "Mr Nicholas Hansen",
-                        "phone": null
-                    }
-                });
-            }, 1000); // Simulating delay of 1 second
-        });
-    }
-
-    // Function to create form
-    function createForm(container, data) {
-        var form = document.createElement('form');
-        form.innerHTML = `
-
-                <div class="title">Your lease at the below address is ending soon. We are keen to know what your plan is?</div>
-                <div class="address">${data.address}</div>
-                 <div class="form-group">
-                    <label for="tenant_name">Tenant Name:</label>
-                    <input type="text" id="tenant_name" name="tenant_name" value="${data.tenant_name}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="lease_start">Lease Start:</label>
-                    <input type="text" id="lease_start" name="lease_start" value="${data.tenancy.lease_start}" readonly>
-                </div>
-                 <div class="form-group">
-                    <label for="lease_end">Lease End:</label>
-                    <input type="text" id="lease_end" name="lease_end" value="${data.tenancy.lease_end}" readonly>
-                </div>
-                 <div class="form-group">
-                    <label for="property_address">Property Address:</label>
-                    <input type="text" id="property_address" name="property_address" value="${data.address}" readonly>
-                </div>
-                 <div class="form-group">
-                    <label for="property_manager">Property Manager:</label>
-                    <input type="text" id="property_manager" name="property_manager" value="${data.management.property_manager}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="property_manager_email">Property Manager Email:</label>
-                    <input type="text" id="property_manager_email" name="property_manager_email" value="${data.management.property_manager_email}" readonly><br>
-                </div>
-
-                <div class="form-group-btn">
-                    <input type="submit" value="Submit">
-                </div>
-                <div class="footer">
-                    <p>IMPORTANT: We intend this form to be NON-BINDING until a lease agreement or extension is signed. Answers in this form assist us in seeking guidance from your property's owner.</p>
-                </div>
-
-    `;
-        container.appendChild(form);
-
-        // Add event listener for form submission
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-            var formData = new FormData(form);
-            submitFormData(formData);
-        });
-    }
-
-    // Function to submit form data via POST request to webhook
-    function submitFormData(formData) {
-        fetch('https://webhook.site/6d0b1ca9-3fa5-47b7-9d5b-c08b16c6717a', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => console.log('Form submitted successfully:', data))
-            .catch(error => console.error('Error submitting form:', error));
-    }
-
-    // Entry point
-    document.addEventListener('DOMContentLoaded', function() {
-        var container = document.getElementById('form-container');
-
-        // Extract tenant_id and property_id from URL
-        var tenantId = getParameterByName('tenant_id');
-        var propertyId = getParameterByName('property_id');
-
-        // Check if tenant_id and property_id exist
-        if (!tenantId || !propertyId) {
-            container.innerHTML = "Error: Missing tenant_id or property_id";
-            return;
-        }
-
-        // Mock API call to retrieve information about tenant/property
-        mockApiCall(propertyId, tenantId)
-            .then(data => {
-                // Create form with retrieved data
-                createForm(container, data);
+    void (function () {
+        document.querySelectorAll('.needs-validation').forEach((form) => {
+            form.addEventListener('submit', (event) => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
             })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-                container.innerHTML = "Error: Failed to fetch data from API";
-            });
-    });
-
+        })
+    })()
 
 </script>
+<script >
+    var setCalsClearButton = function(year,month,elem){
+
+        var afterShow = function(){
+            var d = new $.Deferred();
+            var cnt = 0;
+            setTimeout(function(){
+                if(elem.dpDiv[0].style.display === "block"){
+                    d.resolve();
+                }
+                if(cnt >= 500){
+                    d.reject("datepicker show timeout");
+                }
+                cnt++;
+            },10);
+            return d.promise();
+        }();
+
+        afterShow.done(function(){
+
+            // datepickerのz-indexを指定
+            $('.ui-datepicker').css('z-index', 2000);
+
+            var buttonPane = $( elem ).datepicker( "widget" ).find( ".ui-datepicker-buttonpane" );
+
+            var btn = $('<button class="ui-datepicker-current ui-state-default ui-priority-primary ui-corner-all" type="button">Clear</button>');
+            btn.off("click").on("click", function () {
+                $.datepicker._clearDate( elem.input[0] );
+            });
+            btn.appendTo( buttonPane );
+        });
+    }
+
+    $.datepicker._gotoToday = function(id) {
+        var target = $(id);
+        var inst = this._getInst(target[0]);
+
+        var date = new Date();
+        this._setDate(inst,date);
+        this._hideDatepicker();
+    }
+
+    $(".datepicker").datepicker({
+        showButtonPanel: true,
+        changeMonth:true,
+        changeYear:true,
+        beforeShow : function(inst,elem){
+            setCalsClearButton(null,null,elem);
+        },
+        onChangeMonthYear:setCalsClearButton
+    })
+</script>
+<script >
+    var leaseRenew = document.getElementById('example');
+    var flexSwitchCheckReverse = document.getElementById('flexSwitchCheckReverse');
+    function fieldHide() {
+        $('#lease-extension').hide();
+        $('#rs-btn').hide();
+        $('#proposed-date').hide();
+        $('#reason-termination').hide();
+        $('#forwarding-address').hide();
+        $('#swtich').hide();
+        $('#occupants-name').hide();
+        $('#occupants-name-rm').hide();
+    }
+    function fieldCheck() {
+        if ($(leaseRenew).val() == '1') {
+
+            $('#lease-extension').show();
+            $('#rs-btn').show();
+            $('#proposed-date').hide();
+            $('#reason-termination').hide();
+            $('#forwarding-address').hide();
+            $('#swtich').show();
+            $('#occupants-name').hide();
+            $('#occupants-name-rm').hide();
+
+            switchCheck()
+
+        } else if ($(leaseRenew).val() == '0') {
+
+            $('#lease-extension').hide();
+            $('#rs-btn').show();
+            $('#proposed-date').show();
+            $('#reason-termination').show();
+            $('#forwarding-address').show();
+            $('#swtich').hide();
+            $('#occupants-name').hide();
+            $('#occupants-name-rm').hide();
+
+        } else {
+            fieldHide()
+        }
+    }
+
+    function switchCheck () {
+        if ($(flexSwitchCheckReverse).is(':checked')) {
+            $('#occupants-name').show();
+            $('#occupants-name-rm').show();
+        } else {
+            $('#occupants-name').hide();
+            $('#occupants-name-rm').hide();
+        }
+    }
+
+    $(document).ready(function() {
+        fieldCheck()
+
+        $('#example').change(function() {
+            fieldCheck()
+            $('#flexSwitchCheckReverse').prop('checked', false);
+        });
+
+        $('#flexSwitchCheckReverse').change(function() {
+            switchCheck()
+        });
+    });
+
+</script>
+
+</body>
 </html>
