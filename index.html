@@ -22,7 +22,7 @@
 
 <script>
 
-    // Function to extract URL parameters
+    // Function to extract URL parameters and decode them from base64
     function getParameterByName(name, url) {
         if (!url) url = window.location.href;
         name = name.replace(/[\[\]]/g, "\\$&");
@@ -30,7 +30,7 @@
             results = regex.exec(url);
         if (!results) return null;
         if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
+        return decodeURIComponent(atob(results[2].replace(/\+/g, " ")));
     }
 
     // Function to mock the API call and return a Promise with mock data
@@ -102,7 +102,6 @@
                                         <option value="0">No, Lease Renew</option>
                                     </select>
                                     <div class="invalid-feedback">This field is required.</div>
-                                    <div class="valid-feedback">Good choice.</div>
                                 </div>
                             </div>
                         </div>
@@ -128,7 +127,6 @@
                                         <option value="24">24 months</option>
                                     </select>
                                     <div class="invalid-feedback">This field is required.</div>
-                                    <div class="valid-feedback">Good choice.</div>
                                 </div>
                             </div>
                         </div>
@@ -160,7 +158,6 @@
                                         <option value="Others">Others</option>
                                     </select>
                                     <div class="invalid-feedback">This field is required.</div>
-                                    <div class="valid-feedback">Good choice.</div>
                                 </div>
                             </div>
                         </div>
@@ -172,7 +169,7 @@
                         </div>
 
                         <div id="swtich" class="row mb-3">
-                            <label class="col-12 col-md-6 col-form-label form-check-label"  for="flexSwitchCheckReverse">RAre there changes to the individual(s) listed on the lease?</label>
+                            <label class="col-12 col-md-6 col-form-label form-check-label"  for="flexSwitchCheckReverse">Are there changes to the individual(s) listed on the lease?</label>
                             <div class="col-12 col-md-6">
                                 <div class="form-check form-switch form-check-reverse">
                                     <input class="form-check-input" type="checkbox" id="flexSwitchCheckReverse" name="occupancy_change"/>
@@ -195,14 +192,12 @@
                                             class="form-select form-select-sm"
                                             data-clearable="true"
                                             multiple
-                                            required=""
                                             name="members_tenants_name[]"
                                     >
                                         <option value="">--- Choose ---</option>
 
                                     </select>
                                     <div class="invalid-feedback">This field is required.</div>
-                                    <div class="valid-feedback">Good choice.</div>
                                 </div>
                             </div>
                         </div>
@@ -234,8 +229,19 @@
         });
     }
 
+    function formatDate(dateString) {
+        var date = new Date(dateString);
+        var day = ('0' + date.getDate()).slice(-2); // add leading zero, if needed
+        var month = ('0' + (date.getMonth() + 1)).slice(-2); // add leading zero, if needed; month is 0-indexed
+        var year = date.getFullYear();
+        return day + '/' + month + '/' + year;
+    }
+
     // Function to insert data to  form
     function insertFormData(data) {
+        // Convert lease_end to DD/MM/YYYY format
+        data.tenancy.lease_end = formatDate(data.tenancy.lease_end);
+
         document.getElementById('top-address').innerText = data.address;
         document.getElementById('expiry-date').innerText = 'current expiry date: ' + data.tenancy.lease_end;
         document.getElementById('jdatepicker').value = data.tenancy.lease_end;
@@ -258,10 +264,23 @@
     }
 
     // Function to submit form data via POST request to webhook
-    function submitFormData(formData) {
+    // function submitFormData(formData) {
+    //     fetch('https://webhook.site/6d0b1ca9-3fa5-47b7-9d5b-c08b16c6717a', {
+    //         method: 'POST',
+    //         body: formData
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => console.log('Form submitted successfully:', data))
+    //         .catch(error => console.error('Error submitting form:', error));
+    // }
+
+    function submitFormData(dataObject) {
         fetch('https://webhook.site/6d0b1ca9-3fa5-47b7-9d5b-c08b16c6717a', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataObject)
         })
             .then(response => response.json())
             .then(data => console.log('Form submitted successfully:', data))
@@ -298,17 +317,18 @@
     const example3 = new UseBootstrapSelect(document.getElementById('example3'))
     const example4 = new UseBootstrapSelect(document.getElementById('example4'))
 
-    void (function () {
-        document.querySelectorAll('.needs-validation').forEach((form) => {
-            form.addEventListener('submit', (event) => {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
-                form.classList.add('was-validated')
-            })
-        })
-    })()
+
+    // void (function () {
+    //     document.querySelectorAll('.needs-validation').forEach((form) => {
+    //         form.addEventListener('submit', (event) => {
+    //             if (!form.checkValidity()) {
+    //                 event.preventDefault()
+    //                 event.stopPropagation()
+    //             }
+    //             form.classList.add('was-validated')
+    //         })
+    //     })
+    // })()
 
 </script>
 <script >
