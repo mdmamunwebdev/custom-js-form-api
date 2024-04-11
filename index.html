@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Example</title>
+    <title>Custom Js Form API</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/use-bootstrap-select@2.0.0/dist/use-bootstrap-select.min.css">
@@ -16,20 +16,87 @@
 </head>
 <body>
 
-<div class="container">
-    <div class="row">
+<div class="container" id="form-container">
+    <!-- Form will be inserted here -->
+</div>
+
+<script>
+
+    // Function to extract URL parameters
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    // Function to mock the API call and return a Promise with mock data
+    function mockApiCall(propertyId, tenantId) {
+        return new Promise((resolve, reject) => {
+            // Simulating asynchronous behavior with setTimeout
+            setTimeout(() => {
+                resolve({
+                    "_id": "pt_property_2119651",
+                    "address": "2/15 Kweda Way, Nollamara, WA, 6061",
+                    "management": {
+                        "property_manager": null,
+                        "property_manager_email": null
+                    },
+                    "members": {
+                        "others": [],
+                        "tenants": [
+                            {
+                                "address": "2/15 Kweda Way, Nollamara, WA, 6061",
+                                "email": null,
+                                "name": "Miss Ahmi Tazmin Belinda Narkle",
+                                "phone": null
+                            },
+                            {
+                                "address": "2/15 Kweda Way, Nollamara, WA, 6061",
+                                "email": null,
+                                "name": "Mr Nicholas Hansen",
+                                "phone": null
+                            }
+                        ]
+                    },
+                    "owner_id": "pt_owner_1721550",
+                    "owner_primary_contact": null,
+                    "property_id": "pt_property_2119651",
+                    "tenancy": {
+                        "lease_end": "2025-04-04T00:00:00",
+                        "lease_start": "2024-04-05T00:00:00"
+                    },
+                    "tenant_id": "pt_tenant_3376520",
+                    "tenant_name": "Ahmi Tazmin Belinda Narkle & Nicholas Hansen",
+                    "tenant_primary_contact": {
+                        "address": "2/15 Kweda Way, Nollamara, WA, 6061",
+                        "email": null,
+                        "name": "Mr Nicholas Hansen",
+                        "phone": null
+                    }
+                });
+            }, 1000); // Simulating delay of 1 second
+        });
+    }
+
+    // Function to create form
+    function createForm(container) {
+        container.innerHTML= `<div class="row">
         <div class="col-12 col-md-10 mx-auto mt-5">
             <div class="card">
                 <div class="card-body">
                     <div class="card-title text-center">
                         Your lease at the below address is ending soon. We are keen to know what your plan is?
                     </div>
-                    <div class="h1 text-center">2/15 Kweda Way, Nollamara, WA, 6061</div>
-                    <form class="needs-validation vstack gap-3" novalidate="">
+                    <div class="h1 text-center" id="top-address">2/15 Kweda Way, Nollamara, WA, 6061</div>
+                    <form id="leaseForm" class="needs-validation vstack gap-3" novalidate="">
                         <div class="row mb-3">
                             <div class="col-12 col-md-5 mx-auto">
                                 <div>
-                                    <select id="example" class="form-select form-select-sm" data-clearable="true" required="">
+                                    <select id="example" class="form-select form-select-sm" data-clearable="true" required="" name="lease_renew_selection">
                                         <option value="">--- Select ---</option>
                                         <option value="1">Yes, Lease Renew</option>
                                         <option value="0">No, Lease Renew</option>
@@ -43,7 +110,7 @@
                         <div id="lease-extension" class="row mb-3">
                             <label for="example2" class="col-12 col-md-6 text-start col-form-label">
                                 How long you'd like to extend your lease from the
-                                <div class="">current expiry date: 26/03/2025</div>
+                                <div class="" id="expiry-date">current expiry date: 26/03/2025</div>
                             </label>
                             <div class="col-12 col-md-6">
                                 <div>
@@ -52,6 +119,7 @@
                                             class="form-select form-select-sm"
                                             data-clearable="true"
                                             required=""
+                                            name="lease_extension"
                                     >
                                         <option value="">--- Select ---</option>
                                         <option value="6">6 months</option>
@@ -68,7 +136,7 @@
                         <div id="proposed-date" class="row mb-3">
                             <label for="jdatepicker" class="col-12 col-md-6 col-form-label">Proposed Date to Vacate</label>
                             <div class="col-12 col-md-6">
-                                <input type="text"  id="jdatepicker" class="datepicker form-control" readonly="readonly" required>
+                                <input type="text"  id="jdatepicker" class="datepicker form-control" readonly="readonly" name="tenancy_lease_end" required>
                             </div>
                         </div>
                         <div id="reason-termination" class="row mb-3">
@@ -80,6 +148,7 @@
                                             class="form-select form-select-sm"
                                             data-clearable="true"
                                             required=""
+                                            name="termination_reason"
                                     >
                                         <option value="">--- Select ---</option>
                                         <option value="Relocating for work">Relocating for work</option>
@@ -98,7 +167,7 @@
                         <div id="forwarding-address" class="row mb-3">
                             <label for="address" class="col-12 col-md-6 col-form-label">Forwarding Address</label>
                             <div class="col-12 col-md-6">
-                                <input type="text"  id="address" class="form-control"/>
+                                <input type="text"  id="address" class="form-control" name="forwarding_address"/>
                             </div>
                         </div>
 
@@ -106,7 +175,7 @@
                             <label class="col-12 col-md-6 col-form-label form-check-label"  for="flexSwitchCheckReverse">RAre there changes to the individual(s) listed on the lease?</label>
                             <div class="col-12 col-md-6">
                                 <div class="form-check form-switch form-check-reverse">
-                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckReverse">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckReverse" name="occupancy_change"/>
                                 </div>
                             </div>
                         </div>
@@ -114,7 +183,7 @@
                         <div id="occupants-name" class="row mb-3">
                             <label for="occupant" class="col-12 col-md-6 col-form-label">List the occupant(s) name to add.</label>
                             <div class="col-12 col-md-6">
-                                <input type="text"  id="occupant" class="form-control"/>
+                                <input type="text"  id="occupant" class="form-control" name="occupancy_to_add_text"/>
                             </div>
                         </div>
                         <div id="occupants-name-rm" class="row mb-3">
@@ -127,20 +196,10 @@
                                             data-clearable="true"
                                             multiple
                                             required=""
+                                            name="members_tenants_name[]"
                                     >
                                         <option value="">--- Choose ---</option>
-                                        <option value="apple">Apple</option>
-                                        <option value="banana">Banana</option>
-                                        <option value="grape">Grape</option>
-                                        <option value="kiwi">Kiwi</option>
-                                        <option value="orange">Orange</option>
-                                        <option disabled value="snake_fruit">Snake fruit</option>
-                                        <option value="broccoli">Broccoli</option>
-                                        <option value="carrot">Carrot</option>
-                                        <option value="cucumber">Cucumber</option>
-                                        <option disabled value="eggplant">Eggplant</option>
-                                        <option value="spinach">Spinach</option>
-                                        <option value="tomato">Tomato</option>
+
                                     </select>
                                     <div class="invalid-feedback">This field is required.</div>
                                     <div class="valid-feedback">Good choice.</div>
@@ -164,8 +223,72 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </div>`;
+
+        var form = document.getElementById('leaseForm');
+        // Add event listener for form submission
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            var formData = new FormData(form);
+            submitFormData(formData);
+        });
+    }
+
+    // Function to insert data to  form
+    function insertFormData(data) {
+        document.getElementById('top-address').innerText = data.address;
+        document.getElementById('expiry-date').innerText = 'current expiry date: ' + data.tenancy.lease_end;
+        document.getElementById('jdatepicker').value = data.tenancy.lease_end;
+        data.members.tenants.forEach(function(tenant) {
+            example4.addOption(tenant.name);
+        });
+
+        console.log(data);
+    }
+
+    // Function to call get api for retrive data
+    async function fetchDataAndCreateForm(propertyId, tenantId) {
+        try {
+            const data = await mockApiCall(propertyId, tenantId);
+            await insertFormData(data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            container.innerHTML = "Error: Failed to fetch data from API";
+        }
+    }
+
+    // Function to submit form data via POST request to webhook
+    function submitFormData(formData) {
+        fetch('https://webhook.site/6d0b1ca9-3fa5-47b7-9d5b-c08b16c6717a', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => console.log('Form submitted successfully:', data))
+            .catch(error => console.error('Error submitting form:', error));
+    }
+
+    // Entry point
+    function entryPoint() {
+        var container = document.getElementById('form-container');
+        createForm(container);
+
+        // Extract tenant_id and property_id from URL
+        var tenantId = getParameterByName('tenant_id');
+        var propertyId = getParameterByName('property_id');
+
+        // Check if tenant_id and property_id exist
+        if (!tenantId || !propertyId) {
+            container.innerHTML = "Error: Missing tenant_id or property_id";
+            return;
+        }
+
+        fetchDataAndCreateForm(propertyId, tenantId);
+    }
+
+    entryPoint();
+
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/use-bootstrap-select@2.0.0/dist/use-bootstrap-select.min.js" ></script>
 <script >
@@ -307,6 +430,5 @@
     });
 
 </script>
-
 </body>
 </html>
